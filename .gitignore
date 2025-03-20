@@ -1,0 +1,71 @@
+# Visual Studio-specific
+.vs/
+
+# Build directories
+bin/*.*
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code-specific
+.vscode/
+
+# NuGet packages
+packages/
+*.nupkg
+project.lock.json
+project.assets.json
+
+# Logs
+*.log
+*.tlog
+
+# Debugger and crash dumps
+*.pdb
+*.opendb
+*.cache
+*.ilk
+*.mdb
+*.sbr
+*.sdf
+
+# Rider IDE-specific (JetBrains)
+.idea/
+*.sln.iml
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.pidb
+*.RSUSER
+
+# Publish output
+publish/
+out/
+
+# ASP.NET
+appsettings*.json
+secrets.json
+.env
+
+# Entity Framework Migrations
+Migrations/
+
+# Dotnet tool artifacts
+**/.dotnet/tools/
+
+# Resharper settings
+_ReSharper.Caches/
+
+# StyleCop Analyzers
+.stylecop/
+
+bin/Debug/net8.0/
+
+bin/Release/net8.0/
