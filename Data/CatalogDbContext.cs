@@ -25,6 +25,9 @@ namespace ADLoginAPI.Data
         public DbSet<paragraph> paragraph { get; set; }
         public DbSet<module_edition> module_edition { get; set; }
 
+        public DbSet<html_page> html_page { get; set; }
+        public DbSet<html_category> html_category { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<module_main>()
@@ -38,6 +41,16 @@ namespace ADLoginAPI.Data
             modelBuilder.Entity<module_main>()
                 .Property(m => m.web_valid_date)
                 .HasColumnType("date");
+
+            modelBuilder.Entity<html_page>()
+                .Property(p => p.creation_date)
+                .HasColumnType("date");
+
+            modelBuilder.Entity<html_page>()
+                .HasOne(p => p.category)
+                .WithMany()
+                .HasForeignKey(m => m.category_id)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<area>()
                 .HasKey(e => new { e.id });
@@ -53,6 +66,12 @@ namespace ADLoginAPI.Data
 
             modelBuilder.Entity<mago_version>()
                 .HasKey(e => new { e.id });
+
+            modelBuilder.Entity<html_page>()
+                .HasKey(p => new { p.id });
+
+            modelBuilder.Entity<html_category>()
+                .HasKey(c => new { c.id });
 
             modelBuilder.Entity<module_main>()
                 .HasOne(m => m.area)  
