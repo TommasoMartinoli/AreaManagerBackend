@@ -7,6 +7,7 @@ using ADLoginAPI.Models;
 using ADLoginAPI.DTO;
 using Serilog;
 using System.Text.RegularExpressions;
+using System;
 
 //[Route("api/static-pages")]
 [ApiController]
@@ -61,14 +62,21 @@ public class StaticPagesController : ControllerBase
     }
 
     [HttpPost("api/html_page")]
-    public async Task<ActionResult<html_page>> CreateHtmlPage(html_page html_page)
+    public async Task<ActionResult<html_page>> CreateHtmlPage(PageDTO dto)
     {
-        html_page.category = null;
+        var page = new html_page
+        {
+            title = dto.title,
+            description = dto.description,
+            content = dto.content,
+            category_id = dto.category_id,
+            creation_date = dto.creation_date ?? DateTime.Now
+        };
 
-        _context.html_page.Add(html_page);
+        _context.html_page.Add(page);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetHtmlPageById), new { id = html_page.id }, html_page);
+        return CreatedAtAction(nameof(GetHtmlPageById), new { id = page.id }, page);
     }
 
     [HttpPut("api/html_page/{id}")]
@@ -159,9 +167,36 @@ public class StaticPagesController : ControllerBase
         {
             return BadRequest(new
             {
-                message = "Ipossibile eliminare la categoria.",
+                message = "Impossibile eliminare la categoria.",
                 details = ex.InnerException?.Message ?? ex.Message
             });
         }
     }
+
+    [HttpGet("api/html_categories_pages")]
+    public async Task<ActionResult<List<CategoryWithPagesDTO>>> GetCategoriesWithPages()
+    {
+        var result = await _context.html_category
+            .OrderBy(c => c.name)
+            .Select(cat => new CategoryWithPagesDTO
+            {
+                id = cat.id,
+                name = cat.name,
+                pages = _context.html_page
+                          .Where(p => p.category_id == cat.id)
+                          .OrderBy(p => p.title)
+                          .Select(p => new PageDTO
+                          {
+                              id = p.id,
+                              title = p.title,
+                              description = p.description,
+                              content = null,
+                              category_id = p.category_id,
+                              creation_date = p.creation_date
+                          }).ToList()
+            }).ToListAsync();
+
+        return Ok(result);
+    }
+
 }

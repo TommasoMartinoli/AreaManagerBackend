@@ -4,6 +4,12 @@ using ADLoginAPI.Models;
 
 namespace ADLoginAPI.DTO
 {
+    public class CategoryWithPagesDTO
+    {
+        public int? id { get; set; }
+        public string? name { get; set; }
+        public List<PageDTO> pages { get; set; } = new();
+    }
 
     public class PageDTO
     {
@@ -14,7 +20,6 @@ namespace ADLoginAPI.DTO
         public string? content { get; set; }
         public DateTime? creation_date { get; set; }
     }
-
 
     public class ModuleDTO
     {
